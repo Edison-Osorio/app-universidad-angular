@@ -1,0 +1,289 @@
+<div class="container mt10 mt-5">
+  <div class="row">
+    <div class="col-12">
+      <nav class="navbar navbar-light bg-light mb-3">
+        <div class="container-fluid">
+          <h3 class="fs-3">Listado de carreras</h3>
+          <button
+            type="button"
+            class="btn btn-primary me-2"
+            data-bs-toggle="modal"
+            data-bs-target="#nuevaCarrera"
+          >
+            Nueva Carrera
+          </button>
+          <!-- <form class="d-flex w-25 form-floating">
+            <input
+              class="form-control me-2"
+              type="search"
+              name="filterAlumno"
+              placeholder="Buscar por el nombre del alumno"
+            />
+            <label for="">Buscar por el nombre</label>
+          </form> -->
+        </div>
+      </nav>
+      <mat-card>
+        <div class="row g-3 my-2 d-flex justify-content-center">
+          <div class="col-md-3" *ngFor="let grado of carreras">
+            <div
+              class="card-body bg-light border border-dark shadow bg-body rounded"
+            >
+              <div
+                class="p-3 shadow-sm d-flex justify-content-around align-items-center rounded"
+              >
+                <div>
+                  <h6 class="fs-5">Código: {{ grado.id }}</h6>
+                  <h3 class="fs-5">{{ grado.nombre }}</h3>
+
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#materias"
+                    (click)="listAsignaturas(grado)"
+                  >
+                    Materias
+                  </button>
+                </div>
+                <i
+                  class="fa-solid fa-users fs-1 primary-text border rounded-full secondary-bg p-3"
+                ></i>
+                <i class=""></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para crear una carrera -->
+<div
+  class="modal fade"
+  id="nuevaCarrera"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fs-4" id="staticBackdropLabel">Nueva Carrera</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          id="cancel"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="bootstrap-wrapper">
+            <form (ngSubmit)="formSubmit()">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Nombre de la carrera</mat-label>
+                <input
+                  required
+                  [(ngModel)]="newCarrera.nombre"
+                  name="username"
+                  matInput
+                  placeholder="Digite su nombre de usuario"
+                />
+              </mat-form-field>
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Descripcion de la carrera</mat-label>
+                <input
+                  required
+                  [(ngModel)]="newCarrera.descripcion"
+                  name="descripcion"
+                  matInput
+                  placeholder="Digite su contraseña"
+                />
+              </mat-form-field>
+              <br /><br />
+              <div class="container text-center">
+                <button class="btn" mat-raised-button color="primary">
+                  Crear
+                </button>
+                <button
+                  type="reset"
+                  style="margin-left: 20px"
+                  class="btn"
+                  data-bs-dismiss="modal"
+                  id="cancel"
+                  mat-raised-button
+                  color="accent"
+                >
+                  Cerrrar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal ver materias -->
+<div
+  class="modal fade"
+  id="materias"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fs-4" id="staticBackdropLabel">Listado de asignaturas</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="row">
+            <nav class="navbar navbar-light bg-light">
+              <div class="container-fluid">
+                <button
+                  type="button"
+                  class="btn btn-primary me-2"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modificarAsignatura"
+                  (click)="ifAdd()"
+                >
+                  Agregar Materia
+                </button>
+              </div>
+            </nav>
+            <div class="col">
+              <table class="table bg-white rounded shadow-sm table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col" class="ms-2">ID</th>
+                    <th scope="col">Asignatura</th>
+                    <th scope="col">Descripcion</th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let materia of asignturas">
+                    <th scope="row" class="ms-2">{{ materia.id }}</th>
+                    <td>{{ materia.nombre }}</td>
+                    <td>{{ materia.descripcion }}</td>
+                    <td class="d-flex justify-content-end">
+                      <button
+                        type="button"
+                        class="btn btn-primary me-2"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modificarAsignatura"
+                        (click)="ifUpdate(materia)"
+                      >
+                        <i class="fa-solid fa-pen-to-square"></i>
+                      </button>
+                      <button
+                        class="btn btn-danger"
+                        (click)="deleteAsignatura(materia.id)"
+                      >
+                        <i class="fa-solid fa-trash-can"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para crear una asignatura a una carrera -->
+<div
+  class="modal fade"
+  id="modificarAsignatura"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fs-4" id="staticBackdropLabel">
+          Agregar o Modificar Asignatura
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          id="cancel"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="bootstrap-wrapper">
+            <form (ngSubmit)="formSubmitAsignatura()">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Nombre de la asignatura</mat-label>
+                <input
+                  required
+                  [(ngModel)]="asignatura.nombre"
+                  name="username"
+                  matInput
+                  placeholder="Digite su nombre de usuario"
+                />
+              </mat-form-field>
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Descripcion de la asignatura</mat-label>
+                <input
+                  required
+                  [(ngModel)]="asignatura.descripcion"
+                  name="descripcion"
+                  matInput
+                  placeholder="Digite su contraseña"
+                />
+              </mat-form-field>
+              <br /><br />
+              <div class="container text-center">
+                <button class="btn" mat-raised-button color="primary">
+                  Enviar
+                </button>
+                <button
+                  type="button"
+                  style="margin-left: 20px"
+                  class="btn"
+                  data-bs-dismiss="modal"
+                  id="cerrar"
+                  mat-raised-button
+                  color="accent"
+                >
+                  Cerrrar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
